@@ -1,0 +1,8 @@
+services:
+  db:
+    image: mysql:9.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=uhmono
+      - MYSQL_DATABASE=Test
+    ports:
+      - "3306:3306"
