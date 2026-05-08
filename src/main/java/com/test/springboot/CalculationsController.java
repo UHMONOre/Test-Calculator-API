@@ -27,6 +27,10 @@ public class CalculationsController {
 
         Double sum = calculations.getFirstNum();
 
+        if (calculations.getSecondNum() == null) {
+            calculations.setSecondNum(calculations.getFirstNum());
+        }
+
         if (calculations.getOperator().equals("+")) {
             sum += calculations.getSecondNum();
         }else if (calculations.getOperator().equals("-")) {

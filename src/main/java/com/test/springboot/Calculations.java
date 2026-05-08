@@ -1,5 +1,6 @@
 package com.test.springboot;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,7 @@ public class Calculations {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("savedCalc")
     private User user;
 
     public Calculations() {
