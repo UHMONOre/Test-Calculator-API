@@ -3,6 +3,7 @@ package com.test.springboot;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,11 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private Boolean loggedInFlag = false;
+
+    private LocalDateTime loginTime;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("user")
@@ -55,6 +61,22 @@ public class User {
 
     public List<Calculations> getSavedCalc() {
         return savedCalc;
+    }
+
+    public Boolean getLoggedInFlag() {
+        return loggedInFlag;
+    }
+
+    public void setLoggedInFlag(Boolean loggedInFlag) {
+        this.loggedInFlag = loggedInFlag;
+    }
+
+    public LocalDateTime getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(LocalDateTime loginTime) {
+        this.loginTime = loginTime;
     }
 
     public void addCalc(Calculations calculations){
