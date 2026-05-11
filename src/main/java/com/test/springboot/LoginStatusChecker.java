@@ -16,7 +16,7 @@ public class LoginStatusChecker {
     @Scheduled(fixedDelay = 300000)
     @Transactional
     public void checkLoginStatus() {
-        LocalDateTime oneHourAgo = LocalDateTime.now().minusHours(1);
+        LocalDateTime oneHourAgo = LocalDateTime.now();
 
         List<User> loggedInUsers = userRepository.findByLoginTimeBeforeAndLoggedInFlagTrue(oneHourAgo);
 
