@@ -27,4 +27,16 @@ public class UserService {
 
         return user.getId();
     }
+
+    @Transactional
+    public Integer processRegister(@RequestBody LoginRequest loginRequest) throws Exception {
+        if (userRepository.findByEmail(loginRequest.getEmail()).isPresent()) {
+            throw new Exception("User already exists");
+        }
+
+        User user = new User(loginRequest.getEmail(), loginRequest.getPassword());
+        userRepository.save(user);
+
+        return user.getId();
+    }
 }

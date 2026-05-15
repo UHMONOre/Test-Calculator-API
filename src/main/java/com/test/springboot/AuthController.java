@@ -19,9 +19,20 @@ public class AuthController {
         try {
             Integer userId = userService.processLogin(loginRequest);
 
-            return ResponseEntity.ok("{\"userId\": " + userId + "}");
+            return ResponseEntity.ok("{\"userId\": " + userId + " is successfully logged in.}");
         } catch (Exception e) {
             return ResponseEntity.status(401).body("Invalid email or password");
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody LoginRequest loginRequest) {
+
+        try {
+            Integer userId = userService.processRegister(loginRequest);
+            return ResponseEntity.ok("{\"userId\": " + userId + " is successfully registered}");
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("User already exists");
         }
     }
 }
