@@ -1,10 +1,7 @@
 package com.test.springboot;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/calculator")
@@ -53,5 +50,14 @@ public class CalculationsController {
 
         calculationsRepository.save(calculations);
         return  calculations.getResult();
+    }
+
+    @PostMapping("/revertcalc")
+    public Calculations revertCalc(@RequestHeader("User-Id") Integer userId, @RequestBody Integer calculationId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
+
+        Calculations newCalculation = calculationsRepository.findById(calculationId).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
+
+        return newCalculation;
     }
 }
