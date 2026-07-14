@@ -1,5 +1,6 @@
 package com.test.springboot;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -25,7 +26,7 @@ public class User {
     private LocalDateTime loginTime;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("user")
+    @JsonIgnore
     private List<Calculations> savedCalc;
 
     public User() {
