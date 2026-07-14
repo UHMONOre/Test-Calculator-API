@@ -7,10 +7,8 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("SIMPLE")
 public class SimpleCalculation extends Calculations {
-    @Column(nullable = false)
     private Double firstNum;
     private Double secondNum;
-    @Column(nullable = false)
     private String operator;
 
     protected SimpleCalculation() {}

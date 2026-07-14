@@ -1,7 +1,11 @@
 package com.test.springboot;
 
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/calculator")
@@ -61,8 +65,35 @@ public class CalculationsController {
         return  calculation.getResult();
     }
 
-    @PostMapping("/revertcalc")
-    public Calculations revertCalc(@RequestHeader("User-Id") Integer userId, @PathVariable Integer calculationId){
+    @PostMapping("/complexcalc")
+    public Double complexCalc(@RequestHeader("User-ID") Integer userId ,@RequestBody CalculationRequests.Complex request) {
+        User currentUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (request.expressionString() == null || request.expressionString().trim().isEmpty()) {
+            throw new IllegalArgumentException("Invalid expression");
+        }
+
+        try {
+            Expression exp = new ExpressionBuilder(request.expressionString()).build();
+
+            ComplexCalculation calculation = new ComplexCalculation(request.expressionString());
+
+            calculation.setResult(exp.evaluate());
+            currentUser.addCalc(calculation);
+
+            calculationsRepository.save(calculation);
+            return  calculation.getResult();
+        } catch (ArithmeticException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Math error: Cannot divide by zero");
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid math format: " + e.getMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected server error occurred");
+        }
+    }
+
+    @PostMapping("/revertcalc/{calculationId}")
+    public Calculations revertCalc(@RequestHeader("User-Id") Integer userId, @PathVariable("calculationId") Integer calculationId){
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
 
         Calculations newCalculation = calculationsRepository.findById(calculationId).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
