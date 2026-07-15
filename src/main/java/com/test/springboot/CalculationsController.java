@@ -104,4 +104,15 @@ public class CalculationsController {
 
         return newCalculation;
     }
+
+    @DeleteMapping("/delete/{calculationid}")
+    public void deleteCalc(@RequestHeader("User-Id")  Integer userId, @PathVariable("calculationid") Integer calculationId){
+        Calculations calculation  = calculationsRepository.findById(calculationId).orElseThrow(() -> new IllegalArgumentException("Invalid Id"));
+
+        if (calculation.getUser().getId().equals(userId)) {
+            calculationsRepository.delete(calculation);
+        }else {
+            throw new SecurityException("You do not have permission to view this calculation");
+        }
+    }
 }

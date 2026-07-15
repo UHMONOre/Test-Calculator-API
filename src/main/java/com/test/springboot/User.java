@@ -23,6 +23,9 @@ public class User {
     @Column(nullable = false)
     private Boolean loggedInFlag = false;
 
+    @Column(nullable = false)
+    private Boolean adminFlag = false;
+
     private LocalDateTime loginTime;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -83,6 +86,14 @@ public class User {
 
     public void setLoginTime(LocalDateTime loginTime) {
         this.loginTime = loginTime;
+    }
+
+    public Boolean getAdminFlag() {
+        return adminFlag;
+    }
+
+    public void setAdminFlag(Boolean adminFlag) {
+        this.adminFlag = adminFlag;
     }
 
     public void addCalc(Calculations calculations){
